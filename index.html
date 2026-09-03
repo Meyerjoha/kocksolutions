@@ -160,7 +160,7 @@
           <div class="value"><a href="mailto:info@kocksolutions.de">info@kocksolutions.de</a></div>
         </div>
       </div>
-      <form action="https://formsubmit.co/info@kocksolutions.de" method="POST">
+      <form id="contactForm" action="https://formsubmit.co/ajax/info@kocksolutions.de" method="POST">
         <input type="hidden" name="_subject" value="Neue Anfrage über kocksolutions.de">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
@@ -181,6 +181,7 @@
           <textarea id="message" name="Nachricht" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary submit-button">Nachricht senden</button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
@@ -191,11 +192,18 @@
   <div>© 2026 kocksolutions · Johannes Kock · Turpinstraße 94, 52066 Aachen</div>
 </footer>
 
+<div class="success-overlay" id="successOverlay" role="alert" aria-live="assertive" aria-hidden="true">
+  <p>Danke! Ihre Nachricht wurde gesendet.</p>
+</div>
+
 <script>
   const links = document.querySelectorAll('[data-page]');
   const pages = document.querySelectorAll('.page');
   const navLinksEl = document.getElementById('navLinks');
   const navToggle = document.getElementById('navToggle');
+  const contactForm = document.getElementById('contactForm');
+  const formStatus = document.getElementById('formStatus');
+  const successOverlay = document.getElementById('successOverlay');
 
   function showPage(id){
     pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
@@ -210,6 +218,38 @@
 
   navToggle.addEventListener('click', () => {
     navLinksEl.classList.toggle('open');
+  });
+
+  contactForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    formStatus.textContent = 'Nachricht wird gesendet ...';
+    formStatus.className = 'form-status is-sending';
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { Accept: 'application/json' }
+      });
+
+      if (!response.ok) throw new Error('FormSubmit request failed');
+      contactForm.reset();
+      formStatus.textContent = '';
+      formStatus.className = 'form-status';
+      successOverlay.classList.add('is-visible');
+      successOverlay.setAttribute('aria-hidden', 'false');
+      window.setTimeout(() => {
+        successOverlay.classList.remove('is-visible');
+        successOverlay.setAttribute('aria-hidden', 'true');
+      }, 3000);
+    } catch (error) {
+      formStatus.textContent = 'Der Versand ist fehlgeschlagen. Bitte versuchen Sie es erneut.';
+      formStatus.className = 'form-status is-error';
+    } finally {
+      submitButton.disabled = false;
+    }
   });
 </script>
 

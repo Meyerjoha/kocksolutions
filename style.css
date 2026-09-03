@@ -99,6 +99,49 @@ form{ display:flex; flex-direction:column; gap:1.3rem; }
 .field input:focus, .field textarea:focus{ outline:none; border-color:var(--accent); }
 .field textarea{ resize:vertical; min-height:120px; }
 .submit-button{ align-self:flex-start; }
+.submit-button:disabled{ cursor:wait; opacity:0.65; }
+.form-status{ min-height:1.6em; font-size:0.9rem; }
+.form-status.is-sending{ color:var(--text-muted); }
+@keyframes form-status-flash{
+  0%, 100%{ opacity:1; }
+  35%{ opacity:0.2; }
+  70%{ opacity:1; }
+}
+.form-status.is-success{ color:#8fd18f; animation:form-status-flash 1.2s ease-in-out 2; }
+.form-status.is-error{ color:#ff8d8d; }
+.success-overlay{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+  background:rgba(18,19,22,0.94);
+  color:var(--accent);
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+}
+.success-overlay p{
+  max-width:90vw;
+  padding:1.25rem 2rem;
+  border-radius:12px;
+  background:#218838;
+  font-family:'Space Grotesk', sans-serif;
+  font-size:clamp(1.5rem, 4vw, 3rem);
+  color:#fff;
+  text-align:center;
+  box-shadow:0 12px 35px rgba(0,0,0,0.3);
+}
+.success-overlay.is-visible{
+  visibility:visible;
+  animation:success-overlay-in 3s ease-in-out both;
+}
+@keyframes success-overlay-in{
+  0%, 100%{ opacity:0; }
+  12%, 88%{ opacity:1; }
+}
 
 footer{ border-top:1px solid var(--line); padding:2.5rem 6vw; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; color:var(--text-muted); font-size:0.85rem; }
 footer .logo{ font-size:1rem; }
