@@ -9,9 +9,26 @@
 </head>
 <body>
 
+<div class="ultra-dark-overlay" aria-hidden="true"></div>
+<div class="ultra-light-beam" aria-hidden="true"></div>
+<div class="lightshow-overlay" id="lightshowOverlay" aria-hidden="true">
+  <div class="lightshow-beam lightshow-beam-white lightshow-beam-1"></div>
+  <div class="lightshow-beam lightshow-beam-color lightshow-beam-2"></div>
+  <div class="lightshow-beam lightshow-beam-white lightshow-beam-3"></div>
+  <div class="lightshow-beam lightshow-beam-color lightshow-beam-4"></div>
+  <div class="lightshow-beam lightshow-beam-white lightshow-beam-5"></div>
+  <div class="lightshow-beam lightshow-beam-color lightshow-beam-6"></div>
+  <div class="lightshow-beam lightshow-beam-white lightshow-beam-7"></div>
+  <p class="lightshow-title"><em>Kocksolutions</em></p>
+    <p class="blinder-hint">Leertaste drücken für Blinder</p>
+</div>
+
 <nav>
-  <div class="logo"><img src="website-images/Kocksolutions_Spruch_Transparent.png" alt="Kocksolutions"></div>
+  <div class="logo" id="logoTrigger" role="button" tabindex="0" aria-label="Lichtshow starten"><img src="website-images/Kocksolutions_Spruch_Transparent.png" alt="Kocksolutions"></div>
   <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">☰</button>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Lightmode aktivieren" title="Light-/Darkmode wechseln">
+    <img src="website-images/moving-head-light.svg" alt="">
+  </button>
   <div class="nav-links" id="navLinks">
     <a data-page="home" class="active">Start</a>
     <a data-page="leistungen">Leistungen</a>
@@ -201,9 +218,12 @@
   const pages = document.querySelectorAll('.page');
   const navLinksEl = document.getElementById('navLinks');
   const navToggle = document.getElementById('navToggle');
+  const themeToggle = document.getElementById('themeToggle');
   const contactForm = document.getElementById('contactForm');
   const formStatus = document.getElementById('formStatus');
   const successOverlay = document.getElementById('successOverlay');
+  const logoTrigger = document.getElementById('logoTrigger');
+  const lightshowOverlay = document.getElementById('lightshowOverlay');
   const pageOrder = Array.from(pages);
 
   function showPage(id){
@@ -225,6 +245,73 @@
   navToggle.addEventListener('click', () => {
     navLinksEl.classList.toggle('open');
   });
+
+  function toggleLightshow(){
+    const isVisible = lightshowOverlay.classList.toggle('is-visible');
+    lightshowOverlay.setAttribute('aria-hidden', String(!isVisible));
+  }
+
+  logoTrigger.addEventListener('click', toggleLightshow);
+  logoTrigger.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleLightshow();
+    }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && lightshowOverlay.classList.contains('is-visible')) toggleLightshow();
+      if (event.code === 'Space' && !event.repeat) {
+        event.preventDefault();
+        if (!lightshowOverlay.classList.contains('is-visible')) toggleLightshow();
+        lightshowOverlay.classList.remove('blinder-flash');
+        void lightshowOverlay.offsetWidth;
+        lightshowOverlay.classList.add('blinder-flash');
+      }
+  });
+
+  function setTheme(theme){
+    document.body.dataset.theme = theme;
+    const nextTheme = theme === 'dark' ? 'Lightmode' : theme === 'light' ? 'Ultra Darkmode' : 'Darkmode';
+    themeToggle.setAttribute('aria-label', `${nextTheme} aktivieren`);
+    localStorage.setItem('kocksolutions-theme', theme);
+  }
+
+  const themes = ['dark', 'light', 'ultra'];
+  const savedTheme = localStorage.getItem('kocksolutions-theme');
+  setTheme(themes.includes(savedTheme) ? savedTheme : 'dark');
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = themes.indexOf(document.body.dataset.theme);
+    setTheme(themes[(currentTheme + 1) % themes.length]);
+  });
+
+  const pointerTarget = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  const pointerPosition = { x: pointerTarget.x, y: pointerTarget.y };
+
+  document.addEventListener('pointermove', event => {
+    pointerTarget.x = event.clientX;
+    pointerTarget.y = event.clientY;
+  });
+
+  function animateLight(){
+    pointerPosition.x += (pointerTarget.x - pointerPosition.x) * 0.16;
+    pointerPosition.y += (pointerTarget.y - pointerPosition.y) * 0.16;
+    document.body.style.setProperty('--mouse-x', `${pointerPosition.x}px`);
+    document.body.style.setProperty('--mouse-y', `${pointerPosition.y}px`);
+    const movingHead = themeToggle.getBoundingClientRect();
+    const sourceX = movingHead.left + movingHead.width / 2;
+    const sourceY = movingHead.top + movingHead.height / 2;
+    const angle = Math.atan2(pointerPosition.y - sourceY, pointerPosition.x - sourceX) * 180 / Math.PI - 90;
+    const distance = Math.hypot(pointerPosition.x - sourceX, pointerPosition.y - sourceY);
+    document.body.style.setProperty('--beam-x', `${sourceX}px`);
+    document.body.style.setProperty('--beam-y', `${sourceY}px`);
+    document.body.style.setProperty('--beam-angle', `${angle}deg`);
+    document.body.style.setProperty('--beam-length', `${distance}px`);
+    document.body.style.setProperty('--beam-end-x', `${pointerPosition.x}px`);
+    document.body.style.setProperty('--beam-end-y', `${pointerPosition.y}px`);
+    requestAnimationFrame(animateLight);
+  }
+
+  animateLight();
 
   async function hasMailServer(email){
     const domain = email.split('@').pop().trim().toLowerCase();
