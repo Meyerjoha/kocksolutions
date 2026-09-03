@@ -1,0 +1,18 @@
+@keyframes service-text-in{
+  from{
+    opacity:0;
+    transform:translateX(-48px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+.service:hover p,
+.service:focus p{
+  animation:service-text-in 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change:opacity, transform;
+}
+
+
