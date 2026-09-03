@@ -34,7 +34,7 @@ nav{ position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-it
 .nav-toggle{ display:none; }
 
 .page{ display:none; }
-.page.active{ display:block; animation:fadeIn 5s ease; }
+.page.active{ display:block; animation:fadeIn 1s ease; }
 @keyframes fadeIn{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
 section{ padding:120px 6vw 100px; }
 
