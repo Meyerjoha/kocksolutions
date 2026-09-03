@@ -26,7 +26,7 @@
     <img class="hero-logo" src="website-images/Kocksolutions_Logo_Transparent.png" alt="Kocksolutions Logo">
     <div class="hero-eyebrow mono">Fachkraft für Veranstaltungstechnik · Aachen</div>
     <h1>Ihr Event mit <em>Happy End!</em></h1>
-    <p>kocksolutions plant und realisiert die Licht- und Riggingtechnik Ihrer Veranstaltung — mit Erfahrung aus Musicalproduktionen, Open-Air-Events und Touring.</p>
+    <p>Kocksolutions plant und realisiert die Technische Umsetzung Ihrer Veranstaltung — mit Erfahrung aus Musicalproduktionen, Open-Air-Events und Touring.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" data-page="kontakt">Projekt anfragen</a>
       <a class="btn btn-outline" data-page="leistungen">Leistungen ansehen</a>
@@ -204,9 +204,15 @@
   const contactForm = document.getElementById('contactForm');
   const formStatus = document.getElementById('formStatus');
   const successOverlay = document.getElementById('successOverlay');
+  const pageOrder = Array.from(pages);
 
   function showPage(id){
-    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
+    const currentPage = document.querySelector('.page.active');
+    const nextPage = document.getElementById('page-' + id);
+    if (!nextPage || nextPage === currentPage) return;
+    const direction = pageOrder.indexOf(nextPage) > pageOrder.indexOf(currentPage) ? 'page-enter-right' : 'page-enter-left';
+    pages.forEach(p => p.classList.remove('active', 'page-enter-right', 'page-enter-left'));
+    nextPage.classList.add('active', direction);
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.toggle('active', a.dataset.page === id));
     window.scrollTo({top:0, behavior:'auto'});
     navLinksEl.classList.remove('open');
