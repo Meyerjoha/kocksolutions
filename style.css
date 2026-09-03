@@ -13,7 +13,7 @@
 }
 
 *{ margin:0; padding:0; box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:smooth; overflow-y:scroll; }
 body{ background:var(--bg); color:var(--text); font-family:'Inter', sans-serif; line-height:1.6; overflow-x:hidden; }
 h1,h2,h3,.display{ font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.01em; }
 .mono{ font-family:'JetBrains Mono', monospace; }
@@ -32,6 +32,20 @@ nav{ position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-it
 }
 .nav-links a.active::after{ display:none; }
 .nav-toggle{ display:none; }
+
+@media (min-width:821px){
+  .nav-links a{
+    display:flex;
+    align-items:center;
+    box-sizing:border-box;
+    height:65px;
+    padding:0 0.7rem;
+    margin:-20px 0;
+    line-height:1.6;
+    transform:translateX(0);
+    transition:none;
+  }
+}
 
 .page{ display:none; }
 .page.active{ display:block; animation:fadeIn 0.35s ease; }
