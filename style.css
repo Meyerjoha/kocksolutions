@@ -45,7 +45,7 @@ section{ padding:120px 6vw 100px; }
 .hero h1 em{ font-style:normal; color:var(--accent); }
 .hero p{ margin-top:1.8rem; max-width:52ch; font-size:1.15rem; color:var(--text-muted); }
 .hero-actions{ display:flex; gap:1rem; margin-top:2.5rem; flex-wrap:wrap; }
-.btn{ display:inline-block; padding:0.9rem 1.8rem; border-radius:2px; font-size:0.95rem; font-weight:500; cursor:pointer; transition:all 5s ease; border:1px solid transparent; }
+.btn{ display:inline-block; padding:0.9rem 1.8rem; border-radius:2px; font-size:0.95rem; font-weight:500; cursor:pointer; transition:all 1s ease; border:1px solid transparent; }
 .btn-primary{ background:var(--accent); color:#16171a; }
 .btn-primary:hover{ background:#ffbf5c; }
 .btn-outline{ border-color:var(--line); color:var(--text); }
