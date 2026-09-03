@@ -91,9 +91,18 @@
     position:relative;
     padding-top:80px;
     background:
-      radial-gradient(ellipse 900px 500px at 75% 15%, var(--accent-soft), transparent 60%),
-      repeating-linear-gradient(115deg, transparent 0 78px, var(--line) 78px 79px),
-      repeating-linear-gradient(25deg, transparent 0 78px, var(--line) 78px 79px);
+      radial-gradient(ellipse 900px 500px at 75% 15%, var(--accent-soft), transparent 60%);
+  }
+  .hero-logo{
+    position:absolute;
+    top:130px;
+    right:6vw;
+    width:min(25vw, 280px);
+    max-height:42vh;
+    object-fit:contain;
+    padding:0.75rem;
+    background:#fff;
+    border:1px solid var(--line);
   }
   .hero-eyebrow{
     color:var(--accent);
@@ -300,6 +309,13 @@
   @media (max-width:820px){
     .about-grid, .contact-grid{ grid-template-columns:1fr; }
     .hero-meta{ position:static; margin-top:3rem; }
+    .hero-logo{
+      position:static;
+      display:block;
+      width:min(55vw, 240px);
+      max-height:34vh;
+      margin:2.5rem 0 0 auto;
+    }
     .nav-links{
       position:fixed; top:64px; left:0; right:0; bottom:0;
       background:var(--bg); flex-direction:column; padding:2.5rem 6vw;
@@ -334,6 +350,7 @@
 <!-- ================= HOME ================= -->
 <div class="page active" id="page-home">
   <section class="hero">
+    <img class="hero-logo" src="website-images/Designer (2).png" alt="Kocksolutions Logo">
     <div class="hero-eyebrow mono">Fachkraft für Veranstaltungstechnik · Aachen</div>
     <h1>Ihr Event mit <em>Happy End.</em></h1>
     <p>kocksolutions plant und realisiert die Licht- und Riggingtechnik Ihrer Veranstaltung — mit Erfahrung aus Musicalproduktionen, Open-Air-Events und Touring.</p>
