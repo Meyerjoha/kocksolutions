@@ -220,6 +220,15 @@
     navLinksEl.classList.toggle('open');
   });
 
+  async function hasMailServer(email){
+    const domain = email.split('@').pop().trim().toLowerCase();
+    const dnsUrl = `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=MX`;
+    const response = await fetch(dnsUrl, { headers: { Accept: 'application/dns-json' } });
+    if (!response.ok) throw new Error('Die E-Mail-Domain konnte nicht geprüft werden.');
+    const result = await response.json();
+    return result.Status === 0 && result.Answer?.some(record => record.type === 15);
+  }
+
   contactForm.addEventListener('submit', async event => {
     event.preventDefault();
     const submitButton = contactForm.querySelector('button[type="submit"]');
@@ -228,6 +237,11 @@
     formStatus.className = 'form-status is-sending';
 
     try {
+      const email = document.getElementById('email').value;
+      if (!(await hasMailServer(email))) {
+        throw new Error('Diese E-Mail-Domain scheint keinen Mailserver zu besitzen.');
+      }
+
       const response = await fetch(contactForm.action, {
         method: 'POST',
         body: new FormData(contactForm),
@@ -245,7 +259,7 @@
         successOverlay.setAttribute('aria-hidden', 'true');
       }, 3000);
     } catch (error) {
-      formStatus.textContent = 'Der Versand ist fehlgeschlagen. Bitte versuchen Sie es erneut.';
+      formStatus.textContent = error.message || 'Der Versand ist fehlgeschlagen. Bitte versuchen Sie es erneut.';
       formStatus.className = 'form-status is-error';
     } finally {
       submitButton.disabled = false;
