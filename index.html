@@ -160,22 +160,24 @@
           <div class="value"><a href="mailto:info@kocksolutions.de">info@kocksolutions.de</a></div>
         </div>
       </div>
-      <form onsubmit="event.preventDefault(); alert('Danke für Ihre Nachricht! Wir melden uns zeitnah bei Ihnen.');">
+      <form action="https://formsubmit.co/info@kocksolutions.de" method="POST">
+        <input type="hidden" name="_subject" value="Neue Anfrage über kocksolutions.de">
+        <input type="hidden" name="_template" value="table">
         <div class="field">
           <label for="name">Name</label>
-          <input type="text" id="name" required>
+          <input type="text" id="name" name="Name" required>
         </div>
         <div class="field">
           <label for="email">E-Mail</label>
-          <input type="email" id="email" required>
+          <input type="email" id="email" name="E-Mail" required>
         </div>
         <div class="field">
           <label for="event">Art der Veranstaltung</label>
-          <input type="text" id="event" placeholder="z. B. Firmenfeier, Konzert, Hochzeit">
+          <input type="text" id="event" name="Veranstaltung" placeholder="z. B. Firmenfeier, Konzert, Hochzeit">
         </div>
         <div class="field">
           <label for="message">Nachricht</label>
-          <textarea id="message" required></textarea>
+          <textarea id="message" name="Nachricht" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary submit-button">Nachricht senden</button>
       </form>
