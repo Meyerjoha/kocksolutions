@@ -20,7 +20,7 @@
   <div class="lightshow-beam lightshow-beam-color lightshow-beam-6"></div>
   <div class="lightshow-beam lightshow-beam-white lightshow-beam-7"></div>
   <p class="lightshow-title"><em>Kocksolutions</em></p>
-    <p class="blinder-hint">Leertaste drücken für Blinder</p>
+    <p class="blinder-hint">Tippen oder Leertaste für Blinder</p>
 </div>
 
 <nav>
@@ -270,6 +270,12 @@
     lightshowOverlay.setAttribute('aria-hidden', String(!isVisible));
   }
 
+  function triggerBlinder(){
+    lightshowOverlay.classList.remove('blinder-flash');
+    void lightshowOverlay.offsetWidth;
+    lightshowOverlay.classList.add('blinder-flash');
+  }
+
   logoTrigger.addEventListener('click', toggleLightshow);
   logoTrigger.addEventListener('keydown', event => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -282,10 +288,13 @@
       if (event.code === 'Space' && !event.repeat) {
         event.preventDefault();
         if (!lightshowOverlay.classList.contains('is-visible')) toggleLightshow();
-        lightshowOverlay.classList.remove('blinder-flash');
-        void lightshowOverlay.offsetWidth;
-        lightshowOverlay.classList.add('blinder-flash');
+        triggerBlinder();
       }
+  });
+  lightshowOverlay.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'touch' && lightshowOverlay.classList.contains('is-visible')) {
+      triggerBlinder();
+    }
   });
 
   function setTheme(theme){
