@@ -9,10 +9,17 @@
   }
 }
 
-.service:hover p,
-.service:focus p{
+.service:focus-visible p,
+.service.is-expanded p{
   animation:service-text-in 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change:opacity, transform;
+}
+
+@media (hover:hover) and (pointer:fine){
+  .service:hover p{
+    animation:service-text-in 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change:opacity, transform;
+  }
 }
 
 .service p{
@@ -22,5 +29,4 @@
     opacity 1.4s ease,
     transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
 
