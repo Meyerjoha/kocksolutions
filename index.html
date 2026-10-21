@@ -12,15 +12,36 @@
 <div class="ultra-dark-overlay" aria-hidden="true"></div>
 <div class="ultra-light-beam" aria-hidden="true"></div>
 <div class="lightshow-overlay" id="lightshowOverlay" aria-hidden="true">
-  <div class="lightshow-beam lightshow-beam-white lightshow-beam-1"></div>
-  <div class="lightshow-beam lightshow-beam-color lightshow-beam-2"></div>
-  <div class="lightshow-beam lightshow-beam-white lightshow-beam-3"></div>
-  <div class="lightshow-beam lightshow-beam-color lightshow-beam-4"></div>
-  <div class="lightshow-beam lightshow-beam-white lightshow-beam-5"></div>
-  <div class="lightshow-beam lightshow-beam-color lightshow-beam-6"></div>
-  <div class="lightshow-beam lightshow-beam-white lightshow-beam-7"></div>
+  <div class="lightshow-stage" aria-hidden="true">
+    <svg class="lightshow-truss" viewBox="0 0 1200 150" preserveAspectRatio="none">
+      <path class="truss-outline" d="M0 24H1200M0 54H1200M0 24V54M1200 24V54M0 24l60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30M0 54l60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30 60 30 60-30"/>
+      <path class="truss-outline truss-depth" d="M35 0H1165M35 30H1165M35 0V30M1165 0V30M35 0l56 30 56-30 56 30 56-30 56 30 56-30 56 30 56-30 56 30 56-30 56 30 56-30 56 30 56-30 56 30 56-30 56 30 56-30"/>
+      <path class="truss-highlight" d="M0 25H1200M0 53H1200"/>
+      <path class="truss-drop" d="M120 54v35M360 54v35M600 54v35M840 54v35M1080 54v35"/>
+    </svg>
+    <div class="moving-head moving-head-1"><span class="moving-head-yoke"><span class="moving-head-tilt"><span class="moving-head-beam"></span><span class="moving-head-body"><span class="moving-head-lens"></span></span></span></span></div>
+    <div class="moving-head moving-head-2"><span class="moving-head-yoke"><span class="moving-head-tilt"><span class="moving-head-beam"></span><span class="moving-head-body"><span class="moving-head-lens"></span></span></span></span></div>
+    <div class="moving-head moving-head-3"><span class="moving-head-yoke"><span class="moving-head-tilt"><span class="moving-head-beam"></span><span class="moving-head-body"><span class="moving-head-lens"></span></span></span></span></div>
+    <div class="moving-head moving-head-4"><span class="moving-head-yoke"><span class="moving-head-tilt"><span class="moving-head-beam"></span><span class="moving-head-body"><span class="moving-head-lens"></span></span></span></span></div>
+    <div class="moving-head moving-head-5"><span class="moving-head-yoke"><span class="moving-head-tilt"><span class="moving-head-beam"></span><span class="moving-head-body"><span class="moving-head-lens"></span></span></span></span></div>
+    <div class="blinder-rig blinder-rig-1"><span class="blinder-fixture"></span></div>
+    <div class="blinder-rig blinder-rig-2"><span class="blinder-fixture"></span></div>
+    <div class="blinder-rig blinder-rig-3"><span class="blinder-fixture"></span></div>
+    <div class="blinder-rig blinder-rig-4"><span class="blinder-fixture"></span></div>
+    <div class="blinder-rig blinder-rig-5"><span class="blinder-fixture"></span></div>
+  </div>
+  <div class="lightshow-colorwash" aria-hidden="true"></div>
+  <div class="lightshow-lasers" aria-hidden="true"></div>
+  <div class="lightshow-sparkles" aria-hidden="true"></div>
+  <div class="lightshow-flamejets" aria-hidden="true">
+    <span class="flamejet"></span>
+    <span class="flamejet"></span>
+    <span class="flamejet"></span>
+    <span class="flamejet"></span>
+  </div>
   <p class="lightshow-title"><em>Kocksolutions</em></p>
-    <p class="blinder-hint">Tippen oder Leertaste für Blinder</p>
+  <p class="lightshow-effect-status" id="lightshowEffectStatus" role="status" aria-live="polite"></p>
+  <p class="blinder-hint">1 Farbe · 2 Laser · 3 Glitzer · 4 Flamejets · 0 Reset · Leertaste Blinder · Esc Ende</p>
 </div>
 
 <nav>
@@ -254,6 +275,7 @@
   const successOverlay = document.getElementById('successOverlay');
   const logoTrigger = document.getElementById('logoTrigger');
   const lightshowOverlay = document.getElementById('lightshowOverlay');
+  const lightshowEffectStatus = document.getElementById('lightshowEffectStatus');
   const toolsLoginForm = document.getElementById('toolsLoginForm');
   const toolsLoginStatus = document.getElementById('toolsLoginStatus');
   const toolsContent = document.getElementById('toolsContent');
@@ -445,6 +467,24 @@
   function toggleLightshow(){
     const isVisible = lightshowOverlay.classList.toggle('is-visible');
     lightshowOverlay.setAttribute('aria-hidden', String(!isVisible));
+    if (!isVisible) resetLightshowEffects();
+  }
+
+  function resetLightshowEffects(){
+    lightshowOverlay.classList.remove('effect-colorwash', 'effect-lasers', 'effect-sparkles', 'effect-flamejets');
+    lightshowEffectStatus.textContent = '';
+  }
+
+  function toggleLightshowEffect(key){
+    const effects = {
+      '1': ['effect-colorwash', 'Farbflächen'],
+      '2': ['effect-lasers', 'Laser'],
+      '3': ['effect-sparkles', 'Glitzer'],
+      '4': ['effect-flamejets', 'Flamejets']
+    };
+    const effect = effects[key];
+    const isEnabled = lightshowOverlay.classList.toggle(effect[0]);
+    lightshowEffectStatus.textContent = `${effect[1]} ${isEnabled ? 'eingeschaltet' : 'ausgeschaltet'}`;
   }
 
   function triggerBlinder(){
@@ -455,18 +495,26 @@
 
   logoTrigger.addEventListener('click', toggleLightshow);
   logoTrigger.addEventListener('keydown', event => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if ((event.key === 'Enter' || event.key === ' ') && !lightshowOverlay.classList.contains('is-visible')) {
       event.preventDefault();
       toggleLightshow();
     }
   });
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && lightshowOverlay.classList.contains('is-visible')) toggleLightshow();
-      if (event.code === 'Space' && !event.repeat) {
-        event.preventDefault();
-        if (!lightshowOverlay.classList.contains('is-visible')) toggleLightshow();
-        triggerBlinder();
-      }
+    if (event.key === 'Escape' && lightshowOverlay.classList.contains('is-visible')) {
+      toggleLightshow();
+      return;
+    }
+    if (!lightshowOverlay.classList.contains('is-visible') || event.repeat) return;
+    if (['1', '2', '3', '4'].includes(event.key)) {
+      toggleLightshowEffect(event.key);
+    } else if (event.key === '0') {
+      resetLightshowEffects();
+      lightshowEffectStatus.textContent = 'Lichteffekte zurückgesetzt';
+    } else if (event.code === 'Space') {
+      event.preventDefault();
+      triggerBlinder();
+    }
   });
   lightshowOverlay.addEventListener('pointerdown', event => {
     if (event.pointerType === 'touch' && lightshowOverlay.classList.contains('is-visible')) {
